@@ -1,0 +1,114 @@
+<style>
+    .notification md-list-item p span {
+        background: transparent !important;
+        font-weight: bold;
+    }
+
+</style>
+
+<div ng-show="vm.isInvoiceLoaded" class="loader padding-100" layout="column" layout-fill=""
+    layout-align="center center">
+    <md-progress-linear class="margin-bottom-20" md-mode="indeterminate" ng-show="vm.isInvoiceLoaded">
+    </md-progress-linear>
+</div>
+
+<div ng-show="!vm.isInvoiceLoaded">
+
+    <md-sidenav class="md-sidenav-left md-whiteframe-z4" md-component-id="filter" style="min-width:280px !important;">
+        <md-toolbar class="md-theme-light">
+            <h1 class="md-toolbar-tools">Search</h1>
+        </md-toolbar>
+        <form flex="" name="vm.filter.form">
+            <md-content class="md-padding">
+                <md-autocomplete md-selected-item="vm.selectedItem" md-search-text="vm.searchText"
+                    md-items="item in vm.querySearch(vm.searchText)" md-item-text="item.display" md-min-length="1"
+                    placeholder="Search Customer" md-autofocus>
+                    <md-item-template>
+                        <span md-highlight-text="vm.searchText" md-highlight-flags="^i">{{item.display}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No customer matching.
+                    </md-not-found>
+                </md-autocomplete>
+
+            </md-content>
+        </form>
+    </md-sidenav>
+
+
+    <div layout="row" flex layout-align="start start" class="" style="padding:10px 0px 0px 10px !important;">
+        <div flex="90">
+            <md-button aria-label="search" class="md-primary md-raised md-small" ng-click="vm.createCustomer()"
+               >
+                <md-icon md-font-icon="fa fa-user-plus" style="font-size:14px;"></md-icon>
+                <md-tooltip>Add Customer</md-tooltip>
+            </md-button>
+            <md-button aria-label="search" class="md-primary md-raised md-small" ng-click="vm.openSidebar('filter')">
+                <md-icon md-font-icon="fa fa-search" style="font-size:14px;"></md-icon>
+                <md-tooltip>Search Customer</md-tooltip>
+            </md-button>
+        </div>
+        <div flex="10" ng-show="false">
+            <div class="md-toolbar-tools-">
+                <md-button class="md-icon-button toolbar-button animated" ng-click="vm.openSidebar('gateway_sync')"
+                    aria-label="side navigation">
+                    <md-icon md-font-icon="fa fa-bell-o"></md-icon>
+                    <span class="toolbar-button-badge ng-scope md-cyan-white-theme" theme-background="warn"
+                        style="background-color: red; color:white">{{vm.notifications.length}}</span>
+                </md-button>
+            </div>
+        </div>
+    </div>
+    <div layout="row" layout-xs="column" layout-margin ng-hide="">
+
+        <tri-widget flex title="" content-layout="column" content-layout-align="center">
+            <md-table-container id="invoice_listing">
+                <table md-table class="md-data-table2" md-progress="vm.promise">
+                    <thead md-head md-order="vm.query.order" md-on-reorder="CustomerData">
+                        <tr md-row>
+                            <th md-column></th>
+
+                            <th md-column md-order-by="DisplayName"><span translate>{{vm.columns.DisplayName}}</span></th>
+                            <th md-column md-order-by="Balance" class="col5"> <span translate>{{vm.columns.Contactnumber}}</span></th>
+                            <th md-column  class="col5"> <span translate>{{vm.columns.EditProfile}}</span></th>
+                            <th md-column  class="col5"> <span translate>{{vm.columns.DeleteProfile}}</span></th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <!-- ng-disabled="invoice.IsPaid==1" -->
+                        <tr md-row md-on-select="vm.toolBarProcess()" md-select="customer.Id" md-select-id="customer.Id"
+                            md-auto-select
+                            ng-repeat="customer in CustomerData | filter : vm.searchText  | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit">
+                            <td md-cell></td>
+                                                  
+                            <td md-cell>{{customer.username}}</td>                          
+                            <td md-cell>{{customer.Contactnumber }}</td>
+                            <td md-cell ng-click=vm.openCustomerDetail(customer,$index)>
+     
+                          <md-icon md-font-icon="zmdi zmdi-edit"></md-icon>
+                             <md-tooltip>Edit Customer</md-tooltip>
+                              
+                            </td>
+                            <!-- vm.DeleteCustomer(customer,$index) -->
+                            <td md-cell ng-click = "vm.DeleteCustomer($index)" >
+     
+                                <md-icon md-font-icon="zmdi zmdi-delete"></md-icon>
+                                   <md-tooltip>Delete Customer</md-tooltip>
+                                    
+                                  </td>
+                        </tr>
+                        <tr md-row ng-show="CustomerData.length == 0">
+                            <td md-cell colspan="10" style="text-align:center !important;text-transform:none;">There is
+                                no data to display</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+            <md-table-pagination md-limit="vm.query.limit" md-page="vm.query.page" md-total="{{CustomerData.length}}"
+                md-page-select md-on-paginate="logPagination"></md-table-pagination>
+        </tri-widget>
+    </div>
+    <div flex>
+    
+    </div>
+</div>

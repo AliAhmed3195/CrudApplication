@@ -1,0 +1,55 @@
+<md-dialog aria-label="Add New Customer" class="fullscreen-dialog">
+    <md-progress-linear class="md-primary" md-mode="indeterminate" ng-show="showProgress"></md-progress-linear>
+    <md-dialog-content class="addnewcustomer">
+        <md-progress-linear md-mode="indeterminate" ng-show="showProgress"></md-progress-linear>
+
+        <form class="md-padding" name="customerForm">
+            <h4 class="md-title">Customer Information</h4>
+
+            <div layout="column">
+                <md-input-container flex="">
+                    <label>Customer Name</label>
+                    <input type="text" name="username" ng-model="CustomerData.username" md-autofocus
+                        ng-maxlength="100" ng-pattern="/^[a-zA-Z\s]*$/" required>
+                    <div ng-messages="customerForm.username.$error" md-auto-hide="false">
+                        <p ng-message when="required">Please enter your name</p>
+                        <p ng-message when="maxlength">Text should not be greater then 100 characters</p>
+                        <p ng-message when="pattern">Only alphabets are allowed</p>
+                    </div>
+                </md-input-container>
+                <md-input-container flex="">
+                    <label>Contact Number</label>
+                    <input name="email" required  ng-model="CustomerData.Contactnumber">
+                    
+                   
+                </md-input-container>
+
+
+            </div>
+      
+               
+                   
+            <div layout="row" layout-align="end start" ng-hide="hideDialogActions">
+                <md-button class="md-primary md-raised" ng-click="addCustomer(); cancel()"
+                    ng-disabled="customerForm.$invalid">Save</md-button>
+                <!-- <div class="md-actions"> -->
+                <md-button class="md-primary md-warn" ng-click="cancel()">
+                    Close
+                </md-button>
+                <!-- </div> -->
+            </div>   
+               
+               
+              
+          
+                <!-- </div> -->
+            </div>
+
+        </form>
+    </md-dialog-content>
+</md-dialog>
+
+
+
+
+
